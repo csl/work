@@ -1,5 +1,6 @@
 
-public class website {
+public class website 
+{
 	private String website;
 	private int count;
 	website(String n, int c){

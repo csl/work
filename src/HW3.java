@@ -10,7 +10,8 @@ import java.util.Scanner;
 
 
 
-public class HW3 {
+public class HW3 
+{
 	static websitetree tree;
 	
 	private static ArrayList<String> list = new ArrayList<String>();
@@ -18,7 +19,7 @@ public class HW3 {
 	protected static SearchFromIpeen S = new SearchFromIpeen();
 	
 	
-	public static int countWords(String word,String website)
+	public static int countWords(String word, String website)
 	{
 		
 		String input;
@@ -29,7 +30,7 @@ public class HW3 {
 		{
 			URL url = new URL(website);
 			URLConnection uc = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
 
 	    	//while迴圈一次讀一行出來處理
 	    	while((input = in.readLine()) != null){
@@ -44,10 +45,10 @@ public class HW3 {
 	    	count++;
 
 	    	}
-	    	}
+	    }
 	    	scanner.close();
-		}
-		}
+	}
+}
 		
 		catch(IOException e)
 		{
@@ -58,43 +59,44 @@ public class HW3 {
 	}
 	
 
-	public static void main(String[] args) throws IOException {
-		while(true){
-		Scanner sc  = new Scanner(System.in);
-		
-		System.out.print("Please enter your keyword: ");
-		String word = sc.next();
-		System.out.print("\n");
-		tree = new websitetree("http://www.ipeen.com.tw/", countWords( word, "http://www.ipeen.com.tw/"));
-		ArrayList<String> _list = S.search(word);
-		
-		System.out.println("The result is :");
-		try
+	public static void main(String[] args) throws IOException 
+	{
+		while(true)
 		{
-			for(String s:_list){
-				
-				tree.root.Add(s, countWords(word, s));
-				
-				
-			}
-				
-			int i = 1;
+			Scanner sc  = new Scanner(System.in);
 			
-			for(websitenode w:tree.root.children){
-				System.out.println(i+". "+w.element.toString());
-				i++;
+			System.out.print("Please enter your keyword: ");
+			String word = sc.next();
+			
+			tree = new websitetree("http://www.ipeen.com.tw/", countWords( word, "http://www.ipeen.com.tw/"));
+			ArrayList<String> _list = S.search(word);
+/*			
+			System.out.println("The result is :");
+			
+			try
+			{
+				//_list: all search URLS
+				for(String s:_list)
+				{
+					tree.root.Add(s, countWords(word, s));
+				}
+					
+				int i = 1;
+				
+				for(websitenode w:tree.root.children)
+				{
+					System.out.println(i + ". " + w.element.toString());
+					i++;
+				}
 			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+				System.out.print("\n");
+				*/
 		}
+			
 		
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		System.out.print("\n");
-		}
-		
-
-	//}
-
 }}

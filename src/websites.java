@@ -7,12 +7,11 @@ public class websites {
 	public static ArrayList<website> list;
 	
 	
-	public websites(){
+	public websites()
+	{
 		list = new ArrayList<website>();
-		}
-	
-	
-	
+	}
+
 	public void add(website w){
 		
 		if(list.isEmpty()){
@@ -32,8 +31,4 @@ public class websites {
 		}
 		
 	}
-	
-	
-	
-
 }
