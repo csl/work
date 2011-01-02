@@ -22,17 +22,21 @@ public class SearchFromIpeen {
 		//init variable
 		boolean rep = true;
 		list = new ArrayList<String>();
+		//start page
 		page = 2;
 		
 		//Query Urls all search
-		String surl = "http://www.ipeen.com.tw/search/store_search.php?kw=" + word;
-		String url = new String(surl.getBytes("big5"), "UTF-8"); 
+		String sword = java.net.URLEncoder.encode(word, "UTF-8");
+		String url = "http://www.ipeen.com.tw/search/store_search.php?kw=" + sword;
 		System.out.println(url);
+		//String url = new String(surl.getBytes("big5"), "UTF-8"); 
+		//System.out.println(url);
+		
 		while (true)
 		{
-			rep = urlsearch(word, url);
+			rep = urlsearch(sword, url);
 			if (rep == false) break;
-			url = "http://www.ipeen.com.tw/search/store_search.php?p=" + page + "&kw=" + word;
+			url = "http://www.ipeen.com.tw/search/store_search.php?p=" + page + "&kw=" + sword;
 			page++;
 		}
 		
@@ -48,13 +52,11 @@ public class SearchFromIpeen {
 		try{
 			URL _url = new URL(url);
 			URLConnection uc = _url.openConnection();
-			uc.setRequestProperty("User-agent", "Chrome/7.0.517.44");
-			
+			uc.setRequestProperty("User-agent", "Chrome/7.0.517.44");			
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
 	
 			Scanner scanner = new Scanner(in);
 			scanner.useDelimiter("like href=");
-			String website;
 			
 			System.out.println("Searching...");
 			
@@ -96,14 +98,13 @@ public class SearchFromIpeen {
 				//html end
 				if (scanner.hasNext() == false)
 				{
+					System.out.println("find it" + "/search/store_search.php?p=" + page + "&kw=" + word);
 					if (name.contains("/search/store_search.php?p=" + page + "&kw=" + word))
 					{
-						System.out.println("find it" + "/search/store_search.php?p=" + page + "&kw=" + word);
+						System.out.println("perpare next page.");
 						return true;
 					}
 				}
-
-				
 			}
 		}
 		catch(Exception e)

@@ -61,6 +61,8 @@ public class HW3
 
 	public static void main(String[] args) throws IOException 
 	{
+		SearchGoogle sgoogle= new SearchGoogle();
+		
 		while(true)
 		{
 			Scanner sc  = new Scanner(System.in);
@@ -68,8 +70,10 @@ public class HW3
 			System.out.print("Please enter your keyword: ");
 			String word = sc.next();
 			
-			tree = new websitetree("http://www.ipeen.com.tw/", countWords( word, "http://www.ipeen.com.tw/"));
-			ArrayList<String> _list = S.search(word);
+			sgoogle.LoadGoogleSearch(word);
+			
+			//tree = new websitetree("http://www.ipeen.com.tw/", countWords( word, "http://www.ipeen.com.tw/"));
+			//ArrayList<String> _list = S.search(word);
 /*			
 			System.out.println("The result is :");
 			
