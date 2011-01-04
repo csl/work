@@ -17,7 +17,7 @@ public class SearchFromIpeen {
 		//list = new ArrayList<website>();
 	//}
 	
-	public ArrayList<String> search(String word) throws IOException
+	public ArrayList<String> search(String word, int pages) throws IOException
 	{
 		//init variable
 		boolean rep = true;
@@ -32,18 +32,20 @@ public class SearchFromIpeen {
 		//String url = new String(surl.getBytes("big5"), "UTF-8"); 
 		//System.out.println(url);
 		
+		System.out.println("Searching...");
 		while (true)
 		{
-			rep = urlsearch(sword, url);
+			rep = urlsearch(sword, url, pages);
 			if (rep == false) break;
 			url = "http://www.ipeen.com.tw/search/store_search.php?p=" + page + "&kw=" + sword;
 			page++;
 		}
+		System.out.println("Search ok...");		
 		
 		return list;
 	}
 
-	public boolean urlsearch(String word, String url) throws IOException
+	public boolean urlsearch(String word, String url, int pages) throws IOException
 	{
 		int start = -1;
 		int end = -1;
@@ -58,7 +60,6 @@ public class SearchFromIpeen {
 			Scanner scanner = new Scanner(in);
 			scanner.useDelimiter("like href=");
 			
-			System.out.println("Searching...");
 			
 			while(scanner.hasNext())
 			{
@@ -85,8 +86,6 @@ public class SearchFromIpeen {
 				{
 					String s = name.substring(start+1, end);
 					
-					System.out.println("name: " + s);
-					
 					if(s.contains("http://"))
 					{
 						list.add(s);
@@ -102,6 +101,7 @@ public class SearchFromIpeen {
 					if (name.contains("/search/store_search.php?p=" + page + "&kw=" + word))
 					{
 						System.out.println("perpare next page.");
+						if (page == pages) return false;
 						return true;
 					}
 				}
@@ -112,7 +112,6 @@ public class SearchFromIpeen {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Search ok...");		
 		return false;
 	}
 	
