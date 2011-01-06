@@ -1,3 +1,4 @@
+
 import java.awt.List;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,17 +38,14 @@ public class HW3
 			uc.setRequestProperty("User-agent", "Chrome/7.0.517.44");
 			BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), coder));
 
-	    	//while迴圈一次讀一行出來處理
 	    	while((input = in.readLine()) != null)
 	    	{
 		    	scanner = new Scanner(input);
 	
-		    	//針對一行用scanner一次scan一個字出來 用空白字元做區別
 		    	while(scanner.hasNext())
 		    	{
 			    	String name = scanner.next();
 			    	
-			    	//如果該字是keyword則紀錄
 			    	if(name.contains(word)){
 			    		count++;
 	
