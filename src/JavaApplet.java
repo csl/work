@@ -2,7 +2,13 @@ import javax.swing.JApplet;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Rectangle;
+import java.awt.TextArea;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -77,15 +83,17 @@ public class JavaApplet extends JApplet
 	
 	public void init() 
 	{
+		//resize
+		setSize(800, 600);
+		
 		result="";
 		keyword = JOptionPane.showInputDialog("Stage 0 :Keyword Counting, Keyword:");
-		item1result = item1result + "Stage 0, keyword appears: " + countWords( keyword, "http://www.ipeen.com.tw/","utf-8");
+		result = result + "Stage 0, keyword appears:  " + countWords( keyword, "http://www.ipeen.com.tw/","utf-8") + "\n\n";
 
 		//Item 2
 		word = JOptionPane.showInputDialog("Stage 1: Single-Page Ranking, Please enter your keywords (ex: food,abc...) : ");
 		urls = JOptionPane.showInputDialog("urls: "); 
-		System.out.print("Please enter urls (ex: http://www.ipeen.com.tw,http://www.food.com.tw...) : ");
-		item2result = item2result + "Stage 1, The result is :\n";
+		result = result + "Stage 1, The result is :\n";
 		
 			StringTokenizer urlstoken = new StringTokenizer( urls, ",");
 			while( urlstoken.hasMoreTokens() )
@@ -97,7 +105,7 @@ public class JavaApplet extends JApplet
 			    {
 			            String subkeyords = wstoken.nextToken();
 			            int counts = countWords( subkeyords, myurl, "utf-8");
-			            item2result = item2result + subkeyords + " appears: " + counts + "\n";
+			            result = result + subkeyords + " appears: " + counts + "\n";
 			            map_Data.put(subkeyords, counts);
 			    }
 				
@@ -109,46 +117,44 @@ public class JavaApplet extends JApplet
 					 }
 				 });
 			
-				item2result = item2result + "Rank:\n";
+				result = result + "Rank:\n";
 				int i=1;
 				 for (Map.Entry<String, Integer> entry:list_Data)
 				 {
-					 item2result = item2result + i + ". " + entry.getKey() + "\t" + map_Data.get(entry.getKey()) + "\n";
+					 result = result + i + ". " + entry.getKey() + "\t" + map_Data.get(entry.getKey()) + "\n";
 					 i++;
 				 }
 			}
 			
+			result = result + "\n";
 			word = JOptionPane.showInputDialog("Stage 2 :Hierarchy Ranking, Please enter your keywords (ex: food,abc...) : ");
-			item3result = item3result + "Stage 2, The result is :\n";
+			result = result + "Stage 2, The result is :\n";
 			
 			StringTokenizer stoken = new StringTokenizer( word, ",");
+			ArrayList<String> _list = null;
 			while( stoken.hasMoreTokens() )
 		    {
 		            String subkeyords = stoken.nextToken();
 					tree = new websitetree("http://www.ipeen.com.tw/", countWords( subkeyords, "http://www.ipeen.com.tw/", "utf-8"));
+
 					//default: 4 page (avoid data)
-					ArrayList<String> _list = null;
 					try {
-						_list = S.search(subkeyords, 2);
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-					try
-					{
-						
+						_list = S.search(subkeyords, 3);
+
 						//_list: all search URLS
 						for(String s:_list)
 						{
-							tree.root.Add(s, countWords(subkeyords, s, "utf-8"));
+							int count = countWords(subkeyords, s, "utf-8");
+							tree.root.Add(s, count);
+							System.out.println(s);
+							result = result + s + " , appear:  " + count + "\n";
 						}
 							
 						int i = 1;
 						
 						for(websitenode w:tree.root.children)
 						{
-							item3result = item3result + i + ". " + w.element.toString()+ "\n";
+							result = result + i + ". " + w.element.toString()+ "\n";
 							i++;
 						}
 					}
@@ -159,8 +165,9 @@ public class JavaApplet extends JApplet
 		            
 		    }			
 			
+			result = result + "\n";
 			//Item 3
-			item4result = item4result + "Stage 3:Increase your rank on google\n";
+			result = result + "Stage 3:Increase your rank on google\n";
 			word = JOptionPane.showInputDialog("Stage 3, Please enter your keywords (ex: food,abc...) : ");
 			stoken = new StringTokenizer( word, ",");
 
@@ -170,21 +177,23 @@ public class JavaApplet extends JApplet
 					tree = new websitetree("http://www.google.com.tw/", countWords( subkeyords, "http://www.google.com.tw/", "utf-8"));
 					//default: 16 (avoid data)
 					SearchGoogle sgoogle= new SearchGoogle();
-					ArrayList<String> _list = sgoogle.LoadGoogleSearch(subkeyords, 32);
+					_list = sgoogle.LoadGoogleSearch(subkeyords, 32);
 
 					try
 					{
 						//_list: all search URLS
 						for(String s:_list)
 						{
-							tree.root.Add(s, countWords(subkeyords, s, "utf-8"));
+							int count = countWords(subkeyords, s, "utf-8");
+							tree.root.Add(s, count);
+							result = result + s + " , appear:  " + count + "\n";
 						}
 						
 						int i = 1;
-						
+						result = result + "rank: \n";
 						for(websitenode w:tree.root.children)
 						{
-							item4result = item4result + i + ". " + w.element.toString();
+							result = result + i + ". " + w.element.toString() + "\n";
 							i++;
 						}
 					}
@@ -193,15 +202,15 @@ public class JavaApplet extends JApplet
 						e.printStackTrace();
 					}
 		    }
+
+		TextArea content = new TextArea(result, 500, 250, TextArea.SCROLLBARS_VERTICAL_ONLY);
+		Font bigFont = new Font("SanSerif", Font.BOLD, 16);
+		content.setFont(bigFont);
+	    add(content);
 	}
 	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		g.drawString(item1result, 10, 20);
-		g.drawString(item2result, 10, 40);
-		g.drawString(item3result, 10, 60);
-		g.drawString(item4result, 10, 80);
-
 	}
 }

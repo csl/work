@@ -16,7 +16,7 @@ public class websitenode
 	public void Add(String url,int count)
 	{
 		websitenode _new = new websitenode(url, count);
-		System.out.println(_new.element.toString());
+		//System.out.println(_new.element.toString());
 		if(this.children.isEmpty())
 		{
 			this.children.add(_new);

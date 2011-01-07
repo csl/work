@@ -38,6 +38,7 @@ public class SearchFromIpeen {
 			rep = urlsearch(sword, url, pages);
 			if (rep == false) break;
 			url = "http://www.ipeen.com.tw/search/store_search.php?p=" + page + "&kw=" + sword;
+			System.out.println(url);
 			page++;
 		}
 		System.out.println("Search ok...");		
@@ -59,7 +60,6 @@ public class SearchFromIpeen {
 	
 			Scanner scanner = new Scanner(in);
 			scanner.useDelimiter("like href=");
-			
 			
 			while(scanner.hasNext())
 			{
@@ -85,6 +85,7 @@ public class SearchFromIpeen {
 				if( (start>-1) && (end>-1) && (start<end))
 				{
 					String s = name.substring(start+1, end);
+					System.out.println("tag: " + s);
 					
 					if(s.contains("http://"))
 					{
@@ -97,7 +98,6 @@ public class SearchFromIpeen {
 				//html end
 				if (scanner.hasNext() == false)
 				{
-					System.out.println("find it" + "/search/store_search.php?p=" + page + "&kw=" + word);
 					if (name.contains("/search/store_search.php?p=" + page + "&kw=" + word))
 					{
 						System.out.println("perpare next page.");
